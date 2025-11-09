@@ -19,5 +19,6 @@
     </header>
     <nav>
         <a href="../index.html">Home Page</a> | <!--Home page to original PHP work without templating-->
+        <a href="userView.php">Users</a>
     </nav>
     <main>

@@ -1,8 +1,8 @@
 <?php // db_connect.php - Links PHP app to MySQL Database
     $host = 'localhost';
-    $db   = 'myDatabase';
-    $user = 'z_almanza';
-    $pass = 'myPassword';
+    $db   = 'sherd_z_almanza';
+    $user = 'sherd_z_almanza';
+    $pass = 'QlkWV,-t.~@R';
     $charset = 'utf8mb4';
 
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

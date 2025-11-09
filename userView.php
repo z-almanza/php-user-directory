@@ -8,7 +8,7 @@
 
 <!--Alternative PHP syntax to display user data in HTML table-->
 <?php if ($rows): ?>
-    <table>
+    <table class="table">
         <caption>List of Users</caption>
     <tr>
         <th>ID</th>
