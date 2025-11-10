@@ -2,11 +2,10 @@
 
 PHP Programming Using MySQL:
 
-- A database for users was created using phpMyAdmin.
-- A connection file was created to securely link PHP application to the database.
-- A file to query the users table and return results.
-- A file to view the results of the query.
-
+- Restructured project to use MVC-style structure.
+- Users can register their information which is then stored in a database.
+- Once information is validated, it is added to database.
+- User info displayed after successful registration.
 
 ### Author Info
 
