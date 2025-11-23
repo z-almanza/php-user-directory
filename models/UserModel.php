@@ -31,5 +31,24 @@
 
             return $stmt->fetch();
         }
+
+        public static function updateUser($id, $firstName, $lastName, $username, $email, $password) {
+            $db = static::getDB();
+            $stmt = $db->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, username = :username, email = :email, password = :password WHERE id = :id LIMIT 1");
+            return $stmt->execute([
+            ':firstname' => $firstName,
+            ':lastname' => $lastName,
+            ':username' => $username,
+            ':email' => $email,
+            ':password' => $password,
+            ':id' => $id
+            ]);
+        }
+
+        public static function deactivateUser($id) {
+            $db = static::getDB();
+            $stmt = $db->prepare("UPDATE users SET is_blocked = 1 WHERE id = :id LIMIT 1");
+            return $stmt->execute([':id' => $id]);
+        }
     }
 ?>

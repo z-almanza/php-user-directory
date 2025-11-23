@@ -6,6 +6,8 @@ PHP Programming Using MySQL:
 - Users can register their information which is then stored in a database.
 - Once information is validated, it is added to database.
 - User info displayed after successful registration.
+- Added editing feature so users can update their information.
+- Added deactivation button so users can delete their profile. Profiles are blocked.
 
 ### Author Info
 

@@ -27,7 +27,10 @@
                 <td><strong>Password</strong></td>
                 <td><?= htmlspecialchars($user['password']) ?></td>
             </tr>
-        </table>
+        </table><br>
+
+        <a class="btn btn-warning" href="profile.php?edit&id=<?= htmlspecialchars($user['id']) ?>">Edit Profile</a>
+        <a class="btn btn-danger" href="deactivate.php?id=<?= htmlspecialchars($user['id']) ?>">Deactivate Profile</a>
     </div>
 
 <?php include 'views/partials/footer.php'; ?>

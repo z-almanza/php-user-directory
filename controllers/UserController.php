@@ -90,5 +90,78 @@
 
             require 'views/profile/show.php';
         }
+
+        //Edit function takes user to edit page for specific user ID
+        public static function edit() {
+            $id = $_GET['id'] ?? null;
+            //Ensures id/user exists
+            if ($id) {
+            $user = UserModel::getUserById($id);
+            if ($user) {
+                require 'views/profile/edit.php';
+                return;
+            }
+            }
+            //Otherwise, shows error
+            header("Location: index.php?error=" . urlencode("We could not find you in the system."));
+            exit;
+        }
+
+        //Update function sends data to UserModel
+        public static function update() {
+            $id = $_POST['id'] ?? null;
+            $firstName = trim($_POST['firstName'] ?? '');
+            $lastName = trim($_POST['lastName'] ?? '');
+            $username = trim($_POST['username'] ?? '');
+            $email = trim($_POST['email'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+            $passwordVer = trim($_POST['passwordVer'] ?? '');
+
+            $errors = [];
+
+            if (!$firstName) $errors['firstName'] = "First name is required.";
+            if (!$lastName) $errors['lastName'] = "Last name is required.";
+            if (!$username) $errors['username'] = "Username is required.";
+            if (!$email) $errors['email'] = "Email is required.";
+            if (!$password) $errors['password'] = "Password is required.";
+            if (!$passwordVer) $errors['passwordVer'] = "Re-enter password.";
+            if ($password !== $passwordVer) $errors['passwordVer'] = "Passwords do not match.";
+
+            if (empty($errors)) {
+            if (UserModel::updateUser($id, $firstName, $lastName, $username, $email, $password)) {
+                header("Location: profile.php?id=$id&success=" . urlencode("Profile updated successfully."));
+                exit;
+            } else {
+                $errors[] = "Failed to update user.";
+            }
+            }
+
+            $user = ['id' => $id, 'firstname' => $firstName, 'lastname' => $lastName, 'username' => $username, 'email' => $email, 'password' => $password];
+            require 'views/profile/edit.php';
+        }
+
+        public static function deactivate() {
+            $id = $_POST['id'] ?? $_GET['id'] ?? null;
+
+            // Check server request method is POST
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                // Check for POST $id and db update success
+                if ($id && UserModel::deactivateUser($id)) {
+                header("Location: index.php?deactivate=success");
+                exit;
+                }
+                header("Location: index.php?error=failed");
+                exit;
+            }
+
+            // Check for GET $id, select db record and load the deactivate.php view
+            if ($id && $user = UserModel::getUserById($id)) {
+                require 'views/profile/deactivate.php';
+                return;
+            }
+
+            header("Location: index.php?error=notfound");
+            exit;
+        }
     }
 ?>

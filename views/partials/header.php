@@ -9,7 +9,7 @@
         <!--Customizable Title-->
         <title><?php echo $pageTitle; ?></title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="views/partials/styles.css">
     </head>
 
     <body>
@@ -22,3 +22,14 @@
         <a href="./register.php">Register</a>
     </nav>
     <main>
+        <?php if (isset($_GET['success'])): ?>
+            <div class="alert alert-success" role="alert">
+                <?= htmlspecialchars($_GET['success']) ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger" role="alert">
+                <?= htmlspecialchars($_GET['error']) ?>
+            </div>
+        <?php endif; ?>
