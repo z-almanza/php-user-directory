@@ -1,4 +1,4 @@
-<!--PHP template page-->
+<!--Reusable header-->
 <!DOCTYPE html>
     <html lang="en">
 
@@ -9,7 +9,7 @@
         <!--Customizable Title-->
         <title><?php echo $pageTitle; ?></title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="../css/styles.css">
+        <link rel="stylesheet" href="css/styles.css">
     </head>
 
     <body>
@@ -17,8 +17,8 @@
     <header>
         <h1>PHP Programming - Zamantha Almanza</h1>
     </header>
-    <nav>
-        <a href="../index.html">Home Page</a> | <!--Home page to original PHP work without templating-->
-        <a href="userView.php">Users</a>
+    <nav> 
+        <a href="userView.php">Users</a> | 
+        <a href="./register.php">Register</a>
     </nav>
     <main>

@@ -1,6 +1,4 @@
-        <!--All PHP will be added to pageContent and displayed here-->
-        <?php echo $pageContent; ?>
-    
+<!--Reusable footer-->
     </main>
     <footer>
         <p>&copy; 2025 Zamantha Almanza</p>

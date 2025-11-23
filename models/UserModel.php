@@ -1,5 +1,5 @@
 <?php
-    require_once 'db_connect.php'; //Connecting to users database
+    require_once 'db_connect.php';
 
     class UserModel {
         protected static function getDB() {
@@ -7,14 +7,15 @@
             return $pdo;
         }
 
-        public static function createUser($post) { 
+        //Uses user inserted data to create user
+        public static function createUser($post) {
             $db = static::getDB();
-            $sql = "INSERT INTO users (firstName, lastName, username, email, password) VALUES (:firstName, :lastName, :username, :email, :password)"; //Query to add user to database
+            $sql = "INSERT INTO users (firstname, lastname, username, email, password) VALUES (:firstname, :lastname, :username, :email, :password)";
             $stmt = $db->prepare($sql);
 
             $success = $stmt->execute([
-                ':firstName' => $post['firstName'],
-                ':lastName' => $post['lastName'],
+                ':firstname' => $post['firstName'],
+                ':lastname' => $post['lastName'],
                 ':username' => $post['username'],
                 ':email' => $post['email'],
                 ':password' => $post['password'],
@@ -31,7 +32,4 @@
             return $stmt->fetch();
         }
     }
-
-
-
 ?>

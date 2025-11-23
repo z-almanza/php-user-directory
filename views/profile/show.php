@@ -1,14 +1,33 @@
 <?php 
     $pageTitle = "Registered";
-    include './views/partials/header.php'; ?>
+    include 'views/partials/header.php'; 
+?>
+    <div class='container'>
+        <h3>User Profile</h3>
 
-    <h3>User Profile</h3>
+        <!-- Display user info from database -->
+        <table class='table'>
+            <tr>
+                <td><strong>First Name</strong></td>
+                <td><?= htmlspecialchars($user['firstname']) ?></td>
+            </tr>
+            <tr>
+                <td><strong>Last Name</strong></td>
+                <td><?= htmlspecialchars($user['lastname']) ?></td>
+            </tr>
+            <tr>
+                <td><strong>Username</strong></td>
+                <td><?= htmlspecialchars($user['username']) ?></td>
+            </tr>
+            <tr>
+                <td><strong>Email</strong></td>
+                <td><?= htmlspecialchars($user['email']) ?></td>
+            </tr>
+            <tr>
+                <td><strong>Password</strong></td>
+                <td><?= htmlspecialchars($user['password']) ?></td>
+            </tr>
+        </table>
+    </div>
 
-    <!-- Display user info from database -->
-    <p><strong>First Name:</strong> <?= htmlspecialchars($user['firstName']) ?></p>
-    <p><strong>Last Name:</strong> <?= htmlspecialchars($user['lastName']) ?></p>
-    <p><strong>Username:</strong> <?= htmlspecialchars($user['username']) ?></p>
-    <p><strong>Email:</strong> <?= htmlspecialchars($user['email']) ?></p>
-    <p><strong>Password:</strong> <?= htmlspecialchars($user['password']) ?></p>
-
-<?php include './views/partials/footer.php'; ?>
+<?php include 'views/partials/footer.php'; ?>

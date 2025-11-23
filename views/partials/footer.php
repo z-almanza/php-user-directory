@@ -1,4 +1,4 @@
-<<!--Reusable footer-->
+<!--Reusable footer-->
     </main>
     <footer>
         <p>&copy; 2025 Zamantha Almanza</p>

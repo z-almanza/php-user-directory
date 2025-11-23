@@ -1,6 +1,7 @@
-<?php //Entry point
+<?php //Entry point - load controller
     require_once 'controllers/UserController.php';
 
-    $controller = new UserController(); 
-    $controller->register(); //Passes control to a method in user controller
+    $controller = new UserController();
+    //Passes control to register method in controller
+    $controller->register();
 ?>
