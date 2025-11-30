@@ -9,7 +9,7 @@
 
     <form method='POST' action='register.php'>
         <?php include 'partials/form-fields.php'; ?>
-        <button type='submit' class='button btn-primary'>Register</button>
+        <button type='submit' class='btn btn-primary'>Register</button>
         <?php if (!empty($errors['db'])): ?>
             <p class="text-danger"><?= htmlspecialchars($errors['db']) ?></p>
         <?php endif; ?><br>

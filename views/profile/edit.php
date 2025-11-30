@@ -10,7 +10,7 @@
     <form method='POST' action='profile.php'>
         <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
         <?php include 'partials/form-fields.php'; ?>
-        <button type='submit' class='button btn-primary'>Save Changes</button>
+        <button type='submit' class='btn btn-primary'>Save Changes</button>
         <?php if (!empty($errors['db'])): ?>
             <p class="text-danger"><?= htmlspecialchars($errors['db']) ?></p>
         <?php endif; ?><br>
