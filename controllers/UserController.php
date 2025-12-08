@@ -2,6 +2,8 @@
     require_once 'models/UserModel.php';
 
     class UserController {
+        
+
         public function register() {
             //Setting up arrays with user data and error list
             $post = ['firstName' => '',
@@ -47,6 +49,10 @@
                 if ($post['password'] === '') {
                     $errors['password'] = 'Password required.';
                 }
+                
+                if (!preg_match('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/', $post['password'])) {
+                    $errors['password'] = "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters.";
+                }
 
                 //Verify passwords match
                 if ($post['password'] !== $post['passwordVer']) {
@@ -55,19 +61,20 @@
 
 
                 if (empty($errors)) {
-                // Call the model to create a new user
-                $userId = UserModel::createUser($post);
+                    // Call the model to create a new user
+                    $post['password'] = UserController::encrypt_user_password($post['password']);
+                    $userId = UserModel::createUser($post);
 
-                // Check if the user was created successfully
-                if ($userId) {
-                    // Redirect to the profile view with the new user ID
-                    header("Location: profile.php?id=$userId");
-                    exit;
-                } else {
-                    // If there was a database error, add to errors
-                    $errors['db'] = 'Failed to save user to database.';
+                    // Check if the user was created successfully
+                    if ($userId) {
+                        // Redirect to the profile view with the new user ID
+                        header("Location: profile.php?id=$userId");
+                        exit;
+                    } else {
+                        // If there was a database error, add to errors
+                        $errors['db'] = 'Failed to save user to database.';
+                    }
                 }
-            }
             }
             require 'views/profile/create.php';
         }
@@ -123,17 +130,26 @@
             if (!$lastName) $errors['lastName'] = "Last name is required.";
             if (!$username) $errors['username'] = "Username is required.";
             if (!$email) $errors['email'] = "Email is required.";
+            if ($email === '') {
+                    $errors['email'] = "Email is required.";
+                } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors['email'] = "Enter a valid email.";
+                }
             if (!$password) $errors['password'] = "Password is required.";
+            if (!preg_match('/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/', $password)) {
+                    $errors['password'] = "Must contain at least one number, one uppercase and lowercase letter, and at least 8 or more characters.";
+                }
             if (!$passwordVer) $errors['passwordVer'] = "Re-enter password.";
             if ($password !== $passwordVer) $errors['passwordVer'] = "Passwords do not match.";
 
             if (empty($errors)) {
-            if (UserModel::updateUser($id, $firstName, $lastName, $username, $email, $password)) {
-                header("Location: profile.php?id=$id&success=" . urlencode("Profile updated successfully."));
-                exit;
-            } else {
-                $errors[] = "Failed to update user.";
-            }
+                if (UserModel::updateUser($id, $firstName, $lastName, $username, $email, $password)) {
+                    UserController::update_user_password($id, $password);
+                    header("Location: profile.php?id=$id&success=" . urlencode("Profile updated successfully."));
+                    exit;
+                } else {
+                    $errors[] = "Failed to update user.";
+                }
             }
 
             $user = ['id' => $id, 'firstname' => $firstName, 'lastname' => $lastName, 'username' => $username, 'email' => $email, 'password' => $password];
@@ -162,6 +178,49 @@
 
             header("Location: index.php?error=notfound");
             exit;
+        }
+
+        public function login_user() {
+            $post = ['username' => ''];
+            $errors = [];
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $post['username'] = trim($_POST['username'] ?? '');
+                $password = trim($_POST['password'] ?? '');
+
+                $user = UserModel::findByUsername($post['username']); //changed to usermodel::
+
+                if ($user && password_verify($password, $user['password'])) {
+
+                    $_SESSION['userID'] = $user['id'];  // Stores the user's ID for access checks
+                    $_SESSION['username'] = $user['username']; // Stores their username for use across pages
+
+                    setcookie('username', $user['username'], time() + 60*60*24*30); // Optional: greets returning users
+                    
+                    header("Location: profile.php?id=" . $user['id']); // Redirects to the protected user profile page
+                    exit;
+                } else {
+                    $errors['login'] = 'Invalid username or password.';
+                }
+            }
+            require 'views/login.php';
+        }
+
+        public static function logout_user() {
+            session_unset();
+            session_destroy();
+            header('Location: login.php?msg=logged_out');
+            exit;
+        }
+
+        public static function encrypt_user_password($password) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            return $hashedPassword;
+        }
+        
+        public static function update_user_password($userId, $newPassword) {
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+            return UserModel::update_password_by_id($userId, $hashedPassword);
         }
     }
 ?>

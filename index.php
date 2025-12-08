@@ -1,5 +1,6 @@
 <?php
     $pageTitle = "Home";
+    include 'config/init.php';
     include 'views/partials/header.php';
 ?>
 

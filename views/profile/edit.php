@@ -1,5 +1,6 @@
 <!--Displays the registration form for edits-->
 <?php 
+    require 'config/init.php';
     $pageTitle = "Edit User";
     include 'views/partials/header.php'; 
 ?>

@@ -1,4 +1,5 @@
 <?php 
+    require 'config/init.php';
     $pageTitle = "Registered";
     include 'views/partials/header.php'; 
 ?>

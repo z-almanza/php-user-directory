@@ -36,14 +36,14 @@
 <div class='row'>
     <div class='col'>
         <label for='password'>Password</label>
-        <input type='text' id='password' name='password' class="form-control" value="<?= htmlspecialchars($user['password'] ?? $post['password'] ?? '') ?>">
+        <input type='password' id='password' name='password' class="form-control" value="" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number, one uppercase and lowercase letter, and at least 8 characters" required>
         <?php if (!empty($errors['password'])): ?>
             <p class="text-danger"><?= htmlspecialchars($errors['password']) ?></p>
         <?php endif; ?>
     </div>
     <div class='col'>
         <label for='passwordVer'>Verify Password</label>
-        <input type='text' id='passwordVer' name='passwordVer' class="form-control" value="<?= htmlspecialchars($user['passwordVer'] ?? $post['passwordVer'] ?? '') ?>">
+        <input type='password' id='passwordVer' name='passwordVer' class="form-control" value="">
         <?php if (!empty($errors['passwordVer'])): ?>
             <p class="text-danger"><?= htmlspecialchars($errors['passwordVer']) ?></p>
         <?php endif; ?>

@@ -1,11 +1,12 @@
 <!--Displays the registration form -->
 <?php 
+    require 'config/init.php';
     $pageTitle = "Register";
     include 'views/partials/header.php'; 
 ?>
 
 <div class='container'>
-    <h2>Register User</h2>
+    <h3>Register User</h3>
 
     <form method='POST' action='register.php'>
         <?php include 'partials/form-fields.php'; ?>

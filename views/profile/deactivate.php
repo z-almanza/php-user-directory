@@ -1,4 +1,5 @@
 <?php 
+    require 'config/init.php';
     $pageTitle = "Deactivate Account";
     include 'views/partials/header.php'; 
 ?>

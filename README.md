@@ -8,6 +8,9 @@ PHP Programming Using MySQL:
 - User info displayed after successful registration.
 - Added editing feature so users can update their information.
 - Added deactivation button so users can delete their profile. Profiles are blocked.
+- Added login features to allow users to login based on their credentials.
+- Added session and cookies to personalize the page for users. 
+- Added password encryption for increased security.
 
 ### Author Info
 

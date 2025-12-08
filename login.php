@@ -1,9 +1,9 @@
-<?php //Entry point - load controller
+<?php
     require 'config/init.php';
-    require_once 'controllers/UserController.php';
+    require 'controllers/UserController.php';
 
     $controller = new UserController();
 
     //Passes control to register method in controller
-    $controller->register();
+    $controller->login_user();
 ?>

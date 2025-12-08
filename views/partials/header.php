@@ -18,10 +18,29 @@
         <h1>PHP Programming - Zamantha Almanza</h1>
     </header>
     <nav>
-        <a href="./userView.php">Users</a> | 
-        <a href="./register.php">Register</a>
+        <a href="userView.php">Users</a> | 
+        <a href="register.php">Register</a>
     </nav>
     <main>
+        
+        <div class='container'>
+        <!--Uses displayName from init.php file to greet users-->
+            <?php if ($displayName): ?>
+                <h2>Welcome, <?= htmlspecialchars($displayName) ?>!</h2>
+            <?php else: ?>
+                <h2>Welcome, guest.</h2>
+            <?php endif; ?>
+        </div>
+
+        <!--If user is logged in, only logout button will show. Else, both register and sign in button show.-->
+        <?php if (isset($_SESSION['userID'])): ?>
+            <a href="profile.php?logout=true" class="btn btn-success">Logout</a>
+        <?php else: ?>
+            <a href="register.php" class="btn btn-success">Register</a>
+            <a href="login.php" class="btn btn-success">Sign In</a>
+        <?php endif; ?><br><br>
+
+
         <?php if (isset($_GET['success'])): ?>
             <div class="alert alert-success" role="alert">
                 <?= htmlspecialchars($_GET['success']) ?>
