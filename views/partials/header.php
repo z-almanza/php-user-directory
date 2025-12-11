@@ -35,7 +35,13 @@
         <!--If user is logged in, only logout button will show. Else, both register and sign in button show.-->
         <?php if ($_SESSION['role'] === 'admin'): ?>
             <a href="profile.php?id=<?= $_SESSION['userID'] ?>" class="btn btn-success">Dashboard</a>
-        <?php endif; ?><?php if (isset($_SESSION['userID'])): ?>
+        <?php endif; ?>
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+            <a href="index.php" class="btn btn-success">Blog</a>
+        <?php else: ?>
+            <a href="index.php" class="btn btn-success">Blog</a>
+        <?php endif; ?>
+        <?php if (isset($_SESSION['userID'])): ?>
             <a href="profile.php?logout=true" class="btn btn-success">Logout</a>
         <?php else: ?>
             <a href="register.php" class="btn btn-success">Register</a>

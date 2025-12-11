@@ -9,7 +9,7 @@
     $displayName = $_SESSION['username'] ?? null;
 
     //Function to check if user is logged in by checking if userID exists
-    function isLoggedIn() { 
+    /*function isLoggedIn() { 
         return (isset($_SESSION['userID']));
     }
 
@@ -21,5 +21,5 @@
     //Function to check if user is a valid user by making sure userID exists and is the same as session user ID
     function isUser($id) {
         return ((isset($_SESSION['userID'])) && ($_SESSION['userID'] === $id));
-    }
+    }*/
 ?>

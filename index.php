@@ -1,11 +1,15 @@
 <?php
-    $pageTitle = "Home";
-    include 'config/init.php';
-    include 'views/partials/header.php';
-?>
+require 'config/init.php';
+require_once BASE_PATH . '/controllers/PostController.php';
 
-    <h2>Home</h2>
+if (isset($_GET['id'])) {
+    PostController::show();
+} else {
+    if ($_SESSION['role'] === 'admin') {
+        PostController::adminIndex();
+    } else {
+        PostController::index();
+    }
+}
 
-<?php
-    include 'views/partials/footer.php';
 ?>
