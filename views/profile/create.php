@@ -1,8 +1,12 @@
 <!--Displays the registration form -->
-<?php 
+<?php //public (registration)
     require 'config/init.php';
     $pageTitle = "Register";
-    include 'views/partials/header.php'; 
+    include BASE_PATH . '/views/partials/header.php'; 
+    if (isset($_SESSION['role'])) {
+        header("Location: profile.php?error=" . urlencode("Already registered."));
+        exit;
+    }
 ?>
 
 <div class='container'>
@@ -17,4 +21,4 @@
     </form>
 </div>
 
-<?php include 'views/partials/footer.php'; ?>
+<?php include BASE_PATH . '/views/partials/footer.php'; ?>

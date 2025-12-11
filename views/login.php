@@ -1,7 +1,7 @@
 <?php 
     require 'config/init.php';
     $pageTitle = "Login";
-    include 'views/partials/header.php'; 
+    include BASE_PATH . '/views/partials/header.php'; 
 ?>
 
 <div class='container'>
@@ -29,4 +29,4 @@
     </form>
 </div>
 
-<?php include 'views/partials/footer.php'; ?>
+<?php include BASE_PATH . '/views/partials/footer.php'; ?>

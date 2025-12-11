@@ -11,6 +11,8 @@ PHP Programming Using MySQL:
 - Added login features to allow users to login based on their credentials.
 - Added session and cookies to personalize the page for users. 
 - Added password encryption for increased security.
+- Added account roles: admin and user
+- Added admin privileges that allows admin accounts to delete and deactivate accounts as well as view a user list.
 
 ### Author Info
 

@@ -1,5 +1,6 @@
 <?php //Logic for loading the form
-    require_once 'models/UserModel.php';
+    require_once 'config/init.php';
+    require_once BASE_PATH . '/models/UserModel.php'; //BASE_PATH . "path"
 
     class UserController {
         
@@ -62,8 +63,10 @@
 
                 if (empty($errors)) {
                     // Call the model to create a new user
-                    $post['password'] = UserController::encrypt_user_password($post['password']);
                     $userId = UserModel::createUser($post);
+                    $_SESSION['userID'] = $post[$userId];
+                    $_SESSION['username'] = $post['username'];
+                    $_SESSION['role'] = $post['role'];
 
                     // Check if the user was created successfully
                     if ($userId) {
@@ -76,7 +79,7 @@
                     }
                 }
             }
-            require 'views/profile/create.php';
+            require BASE_PATH . '/views/profile/create.php';
         }
 
         // Show user profile by ID
@@ -88,6 +91,12 @@
                 return;
             }
 
+            //Checking that profile can be viewed if user is either admin or the profile owner
+            if (!isset($_SESSION['role']) && $_SESSION['userID'] !== $id) {
+                header("Location: profile.php?error=" . urlencode("You do not have permission to view this profile as an admin or designated user."));
+                exit;
+            }
+
             // Fetch user data from the model
             $user = UserModel::getUserById($id);
             if (!$user) {
@@ -95,17 +104,23 @@
                 return;
             }
 
-            require 'views/profile/show.php';
+            require BASE_PATH . '/views/profile/show.php';
         }
 
         //Edit function takes user to edit page for specific user ID
         public static function edit() {
+            //Checking that profile can be edited if user is either admin or the profile owner
+            if ((!isset($_SESSION['role']) && $_SESSION['userID'] !== $_GET['id'])) {
+                header("Location: profile.php?error=" . urlencode("You do not have permission to edit this profile."));
+                exit;
+            }
+
             $id = $_GET['id'] ?? null;
             //Ensures id/user exists
             if ($id) {
             $user = UserModel::getUserById($id);
             if ($user) {
-                require 'views/profile/edit.php';
+                require BASE_PATH . '/views/profile/edit.php';
                 return;
             }
             }
@@ -116,6 +131,11 @@
 
         //Update function sends data to UserModel
         public static function update() {
+            if ((!isset($_SESSION['role']) && $_SESSION['userID'] !== $_GET['id'])) {
+                header("Location: profile.php?error=" . urlencode("You do not have permission to edit this profile."));
+                exit;
+            }
+
             $id = $_POST['id'] ?? null;
             $firstName = trim($_POST['firstName'] ?? '');
             $lastName = trim($_POST['lastName'] ?? '');
@@ -153,10 +173,15 @@
             }
 
             $user = ['id' => $id, 'firstname' => $firstName, 'lastname' => $lastName, 'username' => $username, 'email' => $email, 'password' => $password];
-            require 'views/profile/edit.php';
+            require BASE_PATH . '/views/profile/edit.php';
         }
 
         public static function deactivate() {
+            if ($_SESSION['role'] !== 'admin') {
+                header("Location: profile.php?error=" . urlencode("Unauthorized action."));
+                exit;
+            }
+
             $id = $_POST['id'] ?? $_GET['id'] ?? null;
 
             // Check server request method is POST
@@ -172,7 +197,7 @@
 
             // Check for GET $id, select db record and load the deactivate.php view
             if ($id && $user = UserModel::getUserById($id)) {
-                require 'views/profile/deactivate.php';
+                require BASE_PATH . '/views/profile/deactivate.php';
                 return;
             }
 
@@ -188,22 +213,40 @@
                 $post['username'] = trim($_POST['username'] ?? '');
                 $password = trim($_POST['password'] ?? '');
 
-                $user = UserModel::findByUsername($post['username']); //changed to usermodel::
+                $user = UserModel::findByUsername($post['username']); 
+
+                if ($user['is_blocked']) {
+                    echo "Account is blocked. Please contact support,";
+                    exit;
+                }
+
+                $_SESSION['userID'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role'] = $user['role'];
 
                 if ($user && password_verify($password, $user['password'])) {
 
                     $_SESSION['userID'] = $user['id'];  // Stores the user's ID for access checks
                     $_SESSION['username'] = $user['username']; // Stores their username for use across pages
+                    $_SESSION['role'] = $user['role']; //Stores user's role for use across pages
 
                     setcookie('username', $user['username'], time() + 60*60*24*30); // Optional: greets returning users
+
                     
-                    header("Location: profile.php?id=" . $user['id']); // Redirects to the protected user profile page
-                    exit;
+                        header("Location: profile.php?id=" . $user['id']); // Redirects to the protected user profile page
+                        exit;
+                    
                 } else {
                     $errors['login'] = 'Invalid username or password.';
                 }
             }
-            require 'views/login.php';
+            require BASE_PATH . '/views/login.php';
+        }
+
+        public static function dashboard() {
+            require_once BASE_PATH . '/models/UserModel.php';
+            $users = UserModel::getAllUsers();
+            require BASE_PATH . '/views/admin/dashboard.php';
         }
 
         public static function logout_user() {
@@ -221,6 +264,33 @@
         public static function update_user_password($userId, $newPassword) {
             $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
             return UserModel::update_password_by_id($userId, $hashedPassword);
+        }
+
+        public static function delete() {
+            if ($_SESSION['role'] !== 'admin') {
+                header("Location: profile.php?error=" . urlencode("Unauthorized action."));
+                exit;
+            }
+            require_once BASE_PATH . '/models/UserModel.php';
+
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $id = $_POST['id'] ?? null;
+                if ($id && UserModel::deleteUser($id)) {
+                    header("Location: admin/dashboard.php?success=" . urlencode("User deleted."));
+                    exit;
+                }
+                header("Location: admin/dashboard.php?error=" . urlencode("Failed to delete user."));
+                exit;
+            }
+
+            $id = $_GET['id'] ?? null;
+            if ($id) {
+                require BASE_PATH . '/views/profile/delete-verify.php';
+                return;
+            }
+
+            header("Location: admin/dashboard.php?error=" . urlencode("No user ID specified."));
+            exit;
         }
     }
 ?>

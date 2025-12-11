@@ -1,0 +1,11 @@
+<?php //Entry point for admin dashboard - admin only! 
+    require 'config/init.php';
+    require_once BASE_PATH . '/controllers/UserController.php';
+
+    /*if ($_SESSION['role'] !== 'admin') {
+        header("Location: index.php?error=" . urlencode("Access denied. Admins only."));
+        exit;
+    }*/
+
+    UserController::dashboard();
+?>

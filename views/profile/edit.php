@@ -1,8 +1,13 @@
 <!--Displays the registration form for edits-->
-<?php 
+<?php //profile owner or admin
     require 'config/init.php';
+    //Checks that edit is being made by admin or profile owner
+    if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin' && $_SESSION['userID'] !== $user['id']) {
+        header("Location: profile.php?error=" . urlencode("You do not have permission to edit this profile."));
+        exit;
+    }
     $pageTitle = "Edit User";
-    include 'views/partials/header.php'; 
+    include BASE_PATH . '/views/partials/header.php'; 
 ?>
 
 <div class='container'>
@@ -18,4 +23,4 @@
     </form>
 </div>
 
-<?php include 'views/partials/footer.php'; ?>
+<?php include BASE_PATH . '/views/partials/footer.php'; ?>

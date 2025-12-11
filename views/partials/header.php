@@ -26,20 +26,23 @@
         <div class='container'>
         <!--Uses displayName from init.php file to greet users-->
             <?php if ($displayName): ?>
-                <h2>Welcome, <?= htmlspecialchars($displayName) ?>!</h2>
+                <h2>Welcome <?= $_SESSION['role'] ?>, <?= htmlspecialchars($displayName) ?>!</h2>
             <?php else: ?>
                 <h2>Welcome, guest.</h2>
             <?php endif; ?>
         </div>
 
         <!--If user is logged in, only logout button will show. Else, both register and sign in button show.-->
-        <?php if (isset($_SESSION['userID'])): ?>
+        <?php if ($_SESSION['role'] === 'admin'): ?>
+            <a href="profile.php?id=<?= $_SESSION['userID'] ?>" class="btn btn-success">Dashboard</a>
+        <?php endif; ?><?php if (isset($_SESSION['userID'])): ?>
             <a href="profile.php?logout=true" class="btn btn-success">Logout</a>
         <?php else: ?>
             <a href="register.php" class="btn btn-success">Register</a>
             <a href="login.php" class="btn btn-success">Sign In</a>
         <?php endif; ?><br><br>
-
+        
+        
 
         <?php if (isset($_GET['success'])): ?>
             <div class="alert alert-success" role="alert">

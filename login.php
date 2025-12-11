@@ -1,6 +1,6 @@
 <?php
     require 'config/init.php';
-    require 'controllers/UserController.php';
+    require BASE_PATH . '/controllers/UserController.php';
 
     $controller = new UserController();
 
